@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Pokemon </title>
+</head>
+<body>
+    <h1>The Pokemon- Pokidex</h1>
+    <p>
+        Enter Pokemon ID or Name:
+    </p>
+    <input type="text" id="poka" placeholder="ex: pikachu or 96">
+    <input type="button" id="nutob" value="Search">
+    <div id="maal"></div>
+    <script type="module">
+//working on api provide by pokemon
+
+        
+
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("nutob").addEventListener("click", start);
+           
+        });
+        async function start(){
+            let temp=document.getElementById("poka").value.trim().toLowerCase();
+            let cont=document.getElementById("maal");
+            if(!temp){
+                cont.innerHTML="<p>aaajsndvnvvnds</p>";
+                return;
+            }
+            try{
+                    const response=await fetch(`https://pokeapi.co/api/v2/pokemon/${temp}`);
+
+                    if(!response.ok){
+                        throw new Error('fetch unoked u');
+                    }
+
+                    const data= await response.json();
+
+                    cont.innerHTML = `
+                    <h2>${data.name.toUpperCase()}</h2>
+                    <p><b>Normal:</b></p>
+                    <img src="${data.sprites.front_default}" alt="${data.name}" style="width:150px;">
+                    <p><b>Shiny:</b></p>
+                    <img src="${data.sprites.front_shiny}" alt="${data.name} (Shiny)" style="width:150px;">
+                    <p>Type: ${data.types.map(type => type.type.name).join(', ')}</p>
+                    <p>Height: ${data.height / 10} m</p>
+                    <p>Weight: ${data.weight / 10} kg</p>
+                `;
+
+            }
+            catch(error){   
+                cont.innerHTML=`<p>${error}</p>`;
+                
+
+            }
+        }
+
+    </script>
+    
+</body>
+</html>
